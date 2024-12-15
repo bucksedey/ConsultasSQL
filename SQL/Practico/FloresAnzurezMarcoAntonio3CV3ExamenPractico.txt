@@ -1,0 +1,61 @@
+1. Muestra el apellido paterno con el título A.paterno, el apellido materno con el titulo A.materno y 
+el nombre de los clientes
+
+SELECT appaterno AS "A.paterno", apmaterno AS "A.materno", nombre
+FROM "Cliente"
+
+2. Muestra el nombre completo del cliente, su deuda y las mensualidades a 6 meses con un cargo del 10%
+SELECT (nombre || ' ' || appaterno || ' ' || apmaterno) AS "Nombre Completo", deuda, (deuda/6)+(deuda*0.1) AS "Mensualidades"
+FROM "Cliente"
+
+3. Los clientes de la que su apellido paterno es catalan o salgado 
+SELECT * FROM "Cliente"
+	WHERE appaterno LIKE 'Catalan' OR appaterno LIKE 'Salgado'
+
+4. Los clientes que su deuda está entre 5000 y 10000
+SELECT * FROM "Cliente"
+    WHERE deuda BETWEEN 5000 AND 10000
+
+5. Los que se llamen Juan sin importar si tiene 2 o más nombres
+SELECT * FROM "Cliente"
+    WHERE nombre LIKE '%Juan%'
+
+6. Si el cliente compra algo hoy a mensualidades, ¿Cuándo serán los primeros 3 pagos?
+SELECT now()+ CAST('1 month' AS interval) AS "Primer Pago",
+   now()+ CAST('2 month' AS interval) AS "Segundo Pago",
+   now()+ CAST('3 month' AS interval) AS "Tercer Pago"
+FROM "Cliente"
+
+7. Convierte los primeros 3 caracteres del nombre de los clientes a mayusculas (Edgar)->(EDGar)
+SELECT 
+  CONCAT(UPPER(SUBSTR(nombre, 1, 3)), SUBSTR(nombre, 3, 50)) as "Nuevo nombre"
+FROM "Cliente" 
+
+8. Muestra a los clientes que hoy cumplen años
+SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('day', fechanac) = date_part('day', now()) AND date_part('month',fechanac) = date_part('month', now())
+
+9. Muestra el nombre de los clientes que han comprado y su respectivo numero de venta
+SELECT c.nombre, v.nventa
+    FROM "Cliente" c
+    LEFT JOIN "Venta" v ON c.id = v.idcliente
+WHERE v.idcliente IS NOT NULL;
+
+10. Es necesario clasificar a los clientes de acuerdo a su credito, de la forma que se muestra a continuación,
+sin embargo dado que los rangos pueden cambiar, y que probablemente se añadan más categorias, 
+no se quiere dejar estos rangos fijos en las consultas de la aplicación
+
+Select "Cliente".Nombre, "Cliente".Deuda, TipoCredito.Clasificacion
+    FROM "Cliente" join TipoCredito on "Cliente".Deuda Between TipoCredito.LimInf and TipoCredito.LimSup
+
+11. Genera mediante una consulta la siguiente tabla 
+
+
+12. Muestra los otros productos que han comprado los que compraron un DVD
+SELECT nombre
+	FROM "Producto"
+		WHERE idproducto IN (SELECT DISTINCT idproducto FROM "ProductoVenta"
+							WHERE 
+							idproducto IN (SELECT idproducto FROM "Producto" WHERE idproducto = 2)
+							)		

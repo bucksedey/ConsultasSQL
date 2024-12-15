@@ -1,0 +1,132 @@
+
+Alumno: Flores Anzurez Marco Antonio
+Grupo: 3CV3
+Profesor: Edgar A. Catalán Salgado
+
+
+EJERCICIOS FUNCIONES DE AGRUPAMIENTO
+
+
+1.- Muestra el total de ingresos por ventas en la tienda
+SELECT SUM(preciounit*cantidad) AS "Ventas totales"
+	FROM "Venta"
+
+2. Muestra el total de cada venta
+SELECT SUM(preciounit*cantidad)  AS "Total de cada venta", nventa
+	FROM "Venta"
+GROUP BY nventa
+
+3.- Muestra el precio mas alto, el mas bajo y el promedio de los precios de los productos vendidos
+SELECT MAX(preciounit), MIN(preciounit), AVG(preciounit) 
+	FROM "Venta"
+
+4.- Muestra el total de clientes dados de alta
+SELECT COUNT(*)
+	FROM "Cliente"
+
+5.- Muestra el total de clientes dados de alta por delegacion 
+SELECT COUNT(*), delegacion
+	FROM "Cliente"
+GROUP BY delegacion
+
+6.- Muestra el total de productos diferentes en el inventario
+  SELECT COUNT(idproducto) AS "Total de productos diferentes"
+	FROM "Producto"
+WHERE existencia IS NOT NULL
+
+7.- �Cu�ntos proveedores tenemos?
+SELECT COUNT(idproveedor) AS "Numero de proveedores"
+	FROM "Proveedor"
+
+8.- �Cu�ntos productos tenemos de cada proveedor?
+SELECT COUNT(idproducto), idproveedor
+	FROM "Producto"
+GROUP BY idproveedor
+	
+9.- �Cu�ntos clientes tenemos con un cr�dito mayor a 5000?
+SELECT COUNT(*) AS "N. de clientes con credito mayor a 5000"
+	FROM "Cliente"
+WHERE credito > 5000
+
+10.- �Cu�ntos clientes tenemos con un cr�dito mayor a 5000 por delegaci�n?
+SELECT COUNT(*) AS "N. de clientes con credito mayor a 5000", delegacion
+	FROM "Cliente"
+WHERE credito > 5000
+GROUP BY delegacion
+
+11.- �Cu�ntos clientes de Iztacalco o GAM tenemos?
+SELECT COUNT(*) AS "N. de clientes de la GAM o Iztacalco"
+	FROM "Cliente"
+WHERE delegacion = 'GAM' OR delegacion = 'Iztacalco'
+
+12.- Muestra el cr�dito mas bajo asignado, el mas alto y el promedio del cr�dito de todos los clientes
+SELECT MIN(credito) AS "Credito mas bajo", MAX(credito) AS "Credito mas alto", AVG(credito) AS "Promedio de creditos"
+	FROM "Cliente"
+
+13.- Muestra el cr�dito mas bajo asignado, el mas alto y el promedio del cr�dito de los clientes pero por delegaci�n
+SELECT MIN(credito) AS "Credito mas bajo por delegacion", MAX(credito) AS "Credito mas alto por delegacion", AVG(credito) AS "Promedio de creditos por delegacion", delegacion
+	FROM "Cliente"
+GROUP BY delegacion
+
+14.- Muestra la deuda mas baja asignado, el mas alto y el promedio de la deuda de todos los clientes
+SELECT MIN(deuda) AS "Deuda mas baja", MAX(deuda) AS "Deuda mas alta", AVG(deuda) AS "Promedio de deuda"
+	FROM "Cliente"
+
+15.- Muestra la deuda mas baja asignado, el mas alto y el promedio de la deuda de los clientes pero por delegaci�n
+SELECT MIN(deuda) AS "Deuda mas baja por delegacion", MAX(deuda) AS "Deuda mas alta por delegacion", AVG(deuda) AS "Promedio de deuda por delegacion", delegacion
+	FROM "Cliente"
+GROUP BY delegacion
+
+16.- Se desea un reporte del total de los clientes que nacieron en cada a�o, pero solo para los a�os en los que nacieron 3 o mas clientes, de la siguiente forma: 
+
+   A�o Nacimiento |  Total Clientes
+     1980	  |    3
+     1984 	  |    5
+    ...
+SELECT COUNT(EXTRACT(YEAR FROM fechanac)), EXTRACT(YEAR FROM fechanac)
+	FROM "Cliente"
+GROUP BY EXTRACT(YEAR FROM fechanac)
+HAVING COUNT(EXTRACT(YEAR FROM fechanac)) > 3
+
+17.- Genera el siguiente reporte
+      Delegacion  | #Clientes   | Promedio Edad
+        1 	    |   5	 	|    21
+        2         |   3		|    26
+     ...
+SELECT delegacion, COUNT(*) AS "N. de Clientes", ROUND (AVG(EXTRACT(YEAR FROM AGE(NOW(),fechanac))), 1) AS "Promedio Edad"
+	FROM "Cliente"
+GROUP BY delegacion
+
+
+15.- Genera el siguiente reporte
+    Edad   |   # Clientes
+     18    |      1
+     21    |      3
+     24    |      5 
+     38    |      2
+  ....
+SELECT EXTRACT(YEAR FROM AGE(NOW(),fechanac)) AS "Edad" ,COUNT(*) AS "N. de Clientes"
+	FROM "Cliente"
+GROUP BY EXTRACT(YEAR FROM AGE(NOW(),fechanac))
+
+16.- Genera el siguiente reporte 
+ 
+Delegacion      | TotalClientes    |  Menor deuda   | Mayor Deuda | Promedio Credito  |  PromedioEdad
+ 1  		  |	 5 	  	|	  0       |	15000     |      600          | 18
+ 2		  |     3	 	|    1000        |    300      |      1500         |   21
+   ....
+SELECT delegacion, COUNT(*) AS "Total Clientes" , MIN(deuda) AS "Menor deuda", MAX(deuda) AS "Mayor deuda", AVG(credito) AS "Promedio Credito", ROUND (AVG(EXTRACT(YEAR FROM AGE(NOW(),fechanac))),1)AS "Promedio edad" 
+	FROM "Cliente"
+GROUP BY delegacion
+
+17.- Se desea saber el numero de clientes de cada edad por delegacion de la siguiente forma: 
+    Delegacion   |   Edad |   # Clientes
+     1	 	       |   21   |     1
+     1           |   24   |     2
+     2           |   18   |     1
+     2           |   21   |     2
+      ....
+
+SELECT delegacion, EXTRACT(YEAR FROM AGE(NOW(),fechanac)) AS "Edad", COUNT(*) AS "# Clientes" 
+	FROM "Cliente"
+GROUP BY EXTRACT(YEAR FROM AGE(NOW(),fechanac)), delegacion

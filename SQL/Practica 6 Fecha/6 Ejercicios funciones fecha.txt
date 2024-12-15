@@ -1,0 +1,143 @@
+Nombre: Flores Anzurez Marco Antonio
+Grupo: 3CV3
+Profesor: Edgar A. Catalán Salgado
+
+
+EJERCICIOS DE FUNCIONES DE FECHA
+
+
+-- 1. Muestra la fecha actual.
+    SELECT now();
+
+-- 2. ¿Que fecha sera dentro de una semana?
+    SELECT now() + CAST('1 week' AS interval);
+
+-- 3. ¿Cual es la antiguedad de los clientes? (años que han pasado desde que se dieron de alta).
+    SELECT age(now(),fechaalta)
+	FROM "Cliente"
+
+-- 4. Muestra en una columna solo el dia de la fecha de Hoy y en otra el nombre del dia de hoy.
+    SELECT EXTRACT(dow FROM now()),
+	   TO_CHAR(now(),'day')
+	FROM "Cliente"
+
+-- 5. Muestra en columnas separadas al año, mes, dia, hora y minuto de la fecha de alta.
+    SELECT TO_CHAR(fechaalta,'YYYY'),
+	   TO_CHAR(fechaalta,'Month'),
+	   TO_CHAR(fechaalta,'Day'),
+	   TO_CHAR(fechaalta,'HH'),
+	   TO_CHAR(fechaalta,'MI')
+	FROM "Cliente"
+
+-- 6. Si el cliente compra algo hoy a mensualidades, ¿Cuando seran los primeros 3 pagos?
+    SELECT now()+ CAST('1 month' AS interval) AS "Primer Pago",
+	   now()+ CAST('2 month' AS interval) AS "Segundo Pago",
+	   now()+ CAST('3 month' AS interval) AS "Tercer Pago"
+	FROM "Cliente"
+
+-- 7. Muestra la antiguedad de los Clientes en Años, meses y dias.
+    SELECT EXTRACT(year FROM (age(now(), fechaalta))),
+	   EXTRACT(month FROM (age(now(), fechaalta))),
+	   EXTRACT(day FROM (age(now(), fechaalta)))
+	FROM "Cliente"
+
+-- 8. Muestra " el día de hoy [11/03/2010]  es [Sabado] "
+    SELECT 'El dia de hoy '  || EXTRACT (DAY FROM now()) || '/' || EXTRACT (MONTH FROM now()) || '/' || EXTRACT (YEAR FROM now()) || ' es ' || '[' ||TO_CHAR(now(),'Day') || ']'
+	FROM "Cliente"
+
+-- 9. Muestra " [Edgar Catalan] se dio de alta el [sabado 11/03/2010] "
+    SELECT nombre || ' ' || appaterno || ' se dio de alta el ' || TO_CHAR(now(),'Day') || ' ' ||EXTRACT (DAY FROM now()) || '/' || EXTRACT (MONTH FROM now()) || '/' || EXTRACT (YEAR FROM now())
+	FROM "Cliente"
+
+-- 10. Muestra la fecha de Alta, sin mostrar la hora.
+    SELECT DATE(fechaalta) 
+	FROM "Cliente"
+
+-- 11. Muestra a los Clientes que se dieron de Alta en el 2010.
+    SELECT nombre, fechaalta
+	FROM "Cliente"
+    WHERE EXTRACT(YEAR FROM fechaalta) = '2010'
+
+-- 12. Muestra a los que dieron de alta en Diciembre de cualquier año.
+    SELECT nombre, fechaalta
+	FROM "Cliente"
+    WHERE EXTRACT(MONTH FROM fechaalta) = '12'
+
+-- 13. Muestra a los que se dieron de Alta en Febrero del 2009.
+    SELECT nombre, fechaalta
+	FROM "Cliente"
+    WHERE EXTRACT(MONTH FROM fechaalta) = '2' AND EXTRACT(YEAR FROM fechaalta) = '2009'
+
+-- 14. Muestra a los que se dieron de Alta el 15 de Agosto del 2010.
+    SELECT nombre, fechaalta
+	FROM "Cliente"
+    WHERE EXTRACT(MONTH FROM fechaalta) = '8' AND EXTRACT(YEAR FROM fechaalta) = '2010' AND EXTRACT (DAY FROM fechaalta) = '15'
+
+-- 15. Muestra a los clientes que tienen menos de 6 meses que se dieron de alta.
+    SELECT nombre, fechaalta, AGE(NOW(),fechaalta)
+	FROM "Cliente"
+    WHERE EXTRACT(YEAR FROM AGE(NOW(),fechaalta)) < 0.5
+
+-- 16. Muestra a los clientes que tienen menos de 18 años
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE EXTRACT(YEAR FROM AGE(NOW(),fechanac)) >= 18
+
+-- 17. Muestra a los Clientes que hoy cumplen años.
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('day', fechanac) = date_part('day', now()) AND date_part('month',fechanac) = date_part('month', now())
+
+-- 18. Muestra a los clientes que cumplen años en diciembre
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('month', fechanac) = 12
+
+-- 19. Muestra a los clientes que cumplen años Enero Febrero, Marzo o Abril
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('month', fechanac) <= 4
+
+-- 20. Muestra a los Clientes que cumplen años este mes.
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('month', fechanac) = date_part('month', now())
+
+-- 21. Muestra a los clientes que cumplen años el próximo mes
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('month', fechanac) = date_part('month', now()+ interval '1 month')
+
+-- 22. Muestra a los clientes que cumplen años este o el próximo mes
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('month', fechanac) = date_part('month', now()  + CAST('1 month' AS interval))
+	  OR
+	  date_part('month', fechanac) = date_part('month', now())
+
+-- 23. Muestra a los clientes que cumplen años esta semana 
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('week', fechanac) = date_part('week', now())
+
+-- 24. Muestra a los clientes que cumplen años mañana
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('day', fechanac) = date_part('day', now() + CAST('1 day' AS interval)) AND date_part('month',fechanac) = date_part('month', now())
+
+-- 25. Muestra a los clientes que cumplen años en cualquiera de los próximos 7 días
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('day', fechanac) = date_part('day', now() + CAST('7 day' AS interval)) AND date_part('month',fechanac) = date_part('month', now())
+
+-- 26. Muestra a los clientes que cumplen años en el próximo sábado
+    SELECT nombre, fechanac
+	FROM "Cliente"
+    WHERE date_part('day', fechanac) = date_part('day', now() + CAST('1 week' AS interval)) AND date_part('month',fechanac) = date_part('month', now()) AND TO_CHAR(now(),'day') LIKE 'saturday'
+
+-- 27. Para los clientes con una deuda de mas de 5000 pesos crea el texto " Estimado cliente [Edgar Catalan] le recordamos que al dia de hoy [11/03/2011] usted nos debe [6000] le ofrecemos la posibilidad de pagar a 6 meses con el 10% de interes, por lo que esperamos su primer pago de [1100] pesos a mas tardar el dia 11 de abril del 2011. Por su atencion Gracias".
+    SELECT nombre, deuda, 'Estimado cliente '  || nombre || ' ' ||appaterno || ' le recordamos que el dia de hoy ' || CURRENT_DATE || ' usted nos debe ' || deuda || ' le ofrecemos la posibilidad de pagar a 6 meses con el 10% de interes, por lo que esperamos su primer pago de ' || (deuda+deuda*.10)/6 || ' pesos a mas tardar el dia ' || CURRENT_DATE + CAST('1 month' AS interval) || '. Por su atencion Gracias.'
+	FROM "Cliente"
+    WHERE deuda > 5000
+
+

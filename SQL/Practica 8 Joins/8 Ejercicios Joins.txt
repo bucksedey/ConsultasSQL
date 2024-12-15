@@ -1,0 +1,252 @@
+Nombre: Flores Anzurez Marco Antonio
+Grupo: 3CV3
+Profesor: Edgar A. Catal�n Salgado
+
+
+EJERCICIOS JOINS
+
+
+-- 1. MUESTRA A LOS PROVEEDORES CON LOS PRODUCTOS QUE SURTE
+    SELECT 
+	"Proveedor".nombre AS "Nombre proveedor",
+	"Producto".nombre AS "Nombre producto"
+FROM("Producto" JOIN "Proveedor" ON
+ 		"Producto".idproveedor="Proveedor".idproveedor)
+
+-- 2. MUESTRA TODOS LOS PROVEEDORES Y LOS PRODUCTOS QUE SURTEN (SI ES QUE SURTE)
+SELECT 
+	"Proveedor".nombre AS "Nombre proveedor",
+	"Producto".nombre AS "Nombre producto"
+FROM("Producto" RIGHT JOIN "Proveedor" ON
+ 		"Producto".idproveedor="Proveedor".idproveedor)
+
+-- 3. MESTRA TODOS LOS PRODUCTOS Y EL PROVEEDOR QUE LOS SURTE (SI LO SURTE ALGUNO)
+SELECT 
+	"Proveedor".nombre AS "Nombre proveedor",
+	"Producto".nombre AS "Nombre producto"
+FROM("Producto" LEFT JOIN "Proveedor" ON
+ 		"Producto".idproveedor="Proveedor".idproveedor)
+
+-- 4. MUESTRA TODOS LOS PROVEEDORES Y TODOS LOS PRODUCTOS MOSTRANDO LOS PRODUCTOS QUE SURTE CADA PROVEEDOR
+    SELECT 
+	"Proveedor".nombre AS "Nombre proveedor",
+	"Producto".nombre AS "Nombre producto"
+FROM("Producto" RIGHT OUTER JOIN "Proveedor" ON
+ 		"Producto".idproveedor="Proveedor".idproveedor)
+
+-- 5. MUESTRA EL NOMBRE DE LOS PRODUCTOS VENDIDOS
+SELECT 
+	"Producto".nombre AS "Nombre producto vendido"
+FROM("Producto" JOIN "Venta" ON
+ 		"Venta".producto="Producto".nombre)
+
+-- 6. MUESTRA EL NOMBRE DE LOS PRODUCTOS QUE NO SE HAN VENDIDO
+SELECT 
+	"Producto".nombre AS "Nombre producto no vendido"
+FROM("Producto" JOIN "Venta" ON
+ 		 "Venta".producto IS NULL)
+
+-- 7. MUESTRA EL NOMBRE DE LOS CLIENTES QUE HAN COMPRADO ASI COMO LA FECHA EN QUE LO HICIERON
+SELECT 
+	"Cliente".nombre, "Venta".fechaventa 
+FROM("Cliente" JOIN "Venta" ON
+ 		 "Venta".idcliente = "Cliente".id)
+
+-- 8. MUESTRA EL NOMBRE DE LOS CLIENTES QUE NO HAN COMPRADO
+    SELECT 
+	"Cliente".nombre
+FROM ("Venta" LEFT JOIN "Cliente" ON
+ 		 "Venta".idcliente = "Cliente".id)
+	WHERE "Venta".idventa IS NULL
+    
+-- 9. MUESTRA LA FECHA EN QUE SE VENDIERON LOS PRODUCTOS
+	SELECT "Venta".fechaventa, "Producto".nombre
+	FROM("Venta" JOIN "Producto" ON "Venta".producto = "Producto".nombre)
+
+-- 10. MUESTRA LOS PROVEEDORES DE LOS PRODUCTOS VENDIDOS
+	SELECT "Proveedor".nombre
+	FROM("Producto" JOIN "Proveedor"
+		 ON "Producto".idproveedor = "Proveedor".idproveedor) 
+			JOIN "ProductoVenta" ON "ProductoVenta".idproducto = "Producto".idproducto 
+
+-- 11. MUESTRA LOS PROVEEDORES DE LOS PRODUCTOS QUE NO SE HAN VENDIDO
+	SELECT "Proveedor".nombre
+	FROM("Producto" JOIN "Proveedor"
+		 ON "Producto".idproveedor = "Proveedor".idproveedor) 
+			FULL OUTER JOIN "ProductoVenta" ON "ProductoVenta".idproducto = "Producto".idproducto 
+
+-- 12. MUESTRA LOS PRODUCTOS QUE HAN COMPRADO LOS CLIENTES
+SELECT "Cliente".nombre, "Producto".nombre
+	FROM("Venta" JOIN "Cliente"
+		 ON "Venta".idcliente = "Cliente".id) 
+			 JOIN "Producto" ON "Producto".nombre LIKE "Venta".producto
+
+-- 13. �QUIENES HAN COMPRADO UN DVD?
+SELECT "Cliente".nombre, "Producto".nombre
+	FROM("Venta" JOIN "Cliente"
+		 ON "Venta".idcliente = "Cliente".id) 
+			 JOIN "Producto" ON "Producto".nombre = "Venta".producto
+	WHERE "Producto".nombre LIKE 'DvD'
+
+-- 14. �QUIENES HAN COMPRADO ALGO DE SAMSUNG?
+SELECT "Cliente".nombre, "Proveedor".nombre
+	FROM("Venta" JOIN "Cliente"
+		 ON "Venta".idcliente = "Cliente".id) 
+			 JOIN "Producto" ON "Producto".nombre = "Venta".producto
+			 JOIN "Proveedor" ON "Proveedor".idproveedor = "Producto".idproveedor
+	WHERE "Proveedor".nombre LIKE 'samsung'
+
+-- 15. �QUIENES NO HAN COMPRADO UN DVD?
+SELECT "Cliente".nombre, "Producto".nombre
+	FROM("Venta" JOIN "Cliente"
+		 ON "Venta".idcliente = "Cliente".id) 
+			 JOIN "Producto" ON "Producto".nombre = "Venta".producto
+	WHERE "Producto".nombre LIKE 'DvD'
+
+-- 16. �QUIENES NO HAN COMPRADO ALGO DE SAMSUNG?
+SELECT "Cliente".nombre, "Proveedor".nombre
+	FROM("Venta" JOIN "Cliente"
+		 ON "Venta".idcliente = "Cliente".id) 
+			 JOIN "Producto" ON "Producto".nombre = "Venta".producto
+			 JOIN "Proveedor" ON "Proveedor".idproveedor = "Producto".idproveedor
+	WHERE "Proveedor".nombre LIKE 'samsung'
+
+-- 17.- Muestra a todos los clientes junto con el total de ventas que se le han hecho, si todavia no compra debe aparecer cero 
+SELECT "Venta".nventa, COUNT (*)
+	FROM("Venta" JOIN "Cliente"
+		 ON "Venta".idcliente = "Cliente".id)
+	GROUP BY "Venta".nventa
+
+-- 18.- Muestra el total de ventas hechas por delegacion
+SELECT "Cliente".delegacion, COUNT(*)
+	FROM("Venta" JOIN "Cliente"
+		 ON "Venta".idcliente = "Cliente".id)
+	GROUP BY "Cliente".delegacion
+
+-- 19.- Muestra el total de productos vendidos por proveedor
+SELECT "Proveedor".idproveedor, COUNT (*) AS 'Productos vendidos por proveedor'
+	FROM("Proveedor" JOIN "Producto"
+		 ON "Producto".idproveedor = "Proveedor".idproveedor)
+		 JOIN "ProductoVenta" ON "ProductoVenta".idproducto = "Producto".idproducto
+		 GROUP BY "Proveedor".idproveedor
+		 
+-- 20.- Muestra las delegaciones con mas de 2 ventas
+SELECT "Proveedor".idproveedor, COUNT (*) AS "Productos vendidos por proveedor"
+	FROM("Proveedor" JOIN "Producto"
+		 ON "Producto".idproveedor = "Proveedor".idproveedor)
+		 JOIN "ProductoVenta" ON "ProductoVenta".idproducto = "Producto".idproducto
+		 GROUP BY "Proveedor".idproveedor
+	HAVING COUNT(*) > 2
+
+-- 21.- Muestra a los proveedores con mas de 3 productos
+SELECT "Proveedor".idproveedor, COUNT(*) AS "Proveedores con productos"
+	FROM("Proveedor" JOIN "Producto"
+		 ON "Producto".idproveedor = "Proveedor".idproveedor)
+	GROUP BY "Proveedor".idproveedor
+	HAVING COUNT(*) > 3
+
+-- 22.- Muestra a los proveedores con mas de 3 productos vendidos
+SELECT "Proveedor".idproveedor, COUNT (*) AS 'Productos vendidos por proveedor'
+	FROM("Proveedor" JOIN "Producto"
+		 ON "Producto".idproveedor = "Proveedor".idproveedor)
+		 JOIN "ProductoVenta" ON "ProductoVenta".idproducto = "Producto".idproducto
+		 GROUP BY "Proveedor".idproveedor
+	HAVING COUNT(*) > 3
+
+NON EQUIJOINS
+
+-- 1. Es necesario clasificar a los clientes de acuerdo a su deuda de la siguiente forma:
+
+/* 
+Deuda			Clasificacion
+0 		-> 	No Deudor
+1-5000		->	Deudor Bajo
+5001 - 15000	->	Deudor Medio
+15001 o m�s	->	Deudor Alto
+
+Sin embargo dado que los rangos pueden cambiar, y que probablemente se añadan mas categorias, no se quieren dejar estos rangos fijos en las consultas de la aplicacion.
+
+*/ 
+
+Select TblClientes.Nombre, TblClientes.Deuda, TblTiposDeuda.Clasificacion
+from tblClientes join TblTiposDeuda on TblClientes.Deuda Between TblTiposDeuda.LimInf and TblTiposDeuda.LimSup
+
+TipoDeuda
+IdTipoDeuda, Nombre, LimInf, LimSup
+1, No deudor, 0, 0
+2, Deudor Bajo,1, 5000
+3, deudor medio, 5000, 25000
+4, Deudor Alto, 25000, 500000000
+
+2. Se desea clasificar a los clientes de acuerdo a su antiguedad en años para ofrecer premios especiales y beneficios de acuerdo a lo siguiente:
+
+/*
+
+0 - 1 Año	Cliente Nuevo	Sin Premio
+2 - 4 Año	Cliente Medio	Premio Especial 1
+5 � mas años	Cliente Bueno	Premio Especial 2
+
+*/
+
+3. Se desea clasificar a las ventas, para que de acuerdo a su monto total, se le regale al cliente una cuponera con descuentos y promociones, sin embargo debido a posibles cambios en los rangos y a que de acuerdo a la temporada cambien los premios a�adiendo unos y quitando otros, se desesa no dejar fijos estos rangos en las consultas de la aplicacion
+
+/*
+
+0 - 10000		Venta baja		Cuponera Productos Basicos
+10000 o mas		Venta media		Cuponera Productos de lujo
+
+*/
+
+
+-- SELF JOIN
+
+-- 1. Muestra a los productos que cuestan mas que el DVD
+SELECT P1.nombre
+FROM "Producto" as P1 INNER JOIN "Producto" as P2
+ON P1.preciosugerido > P2.preciosugerido WHERE P2.idproducto = 2 
+
+-- 2. Muestra a los clientes con mas credito que edgar
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+ON C1.credito > C2.credito WHERE C2.nombre LIKE 'Edgar' 
+
+-- 3. Muestra a los clientes con mas edad que edgar
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+ON C1.edad > C2.edad WHERE C2.nombre LIKE 'Edgar'
+
+-- 4. Muestra a los clientes de la misma delegacion que edgar
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+ON C1.delegacion = C2.delegacion WHERE C2.nombre LIKE 'Edgar'
+
+-- 5. Muestra las ventas realizadas el mismo dia que la venta con el idventa=2
+SELECT V1.nombre
+FROM "Venta" as V1 INNER JOIN "Venta" as V2
+ON V1.idventa = V2.idventa WHERE V2.fechaventa = V1.fechaventa
+
+-- 6. Muestra los clientes que sean de la misma delegacion que edgar y que tengan mas credito
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+ON C1.delegacion = C2.delegacion WHERE C2.nombre LIKE 'Edgar'
+AND C1.credito>C2.nombre LIKE 'Edgar'
+
+-- 7. Muestra a los clientes con su respectivo aval
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+ON C1.aval = C2.aval
+
+-- 8. Muestra a todos los clientes sin importar si tienen aval o no
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+
+-- 8. Muestra solo a los clientes que NO tienen aval
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+ON NOT (C1.aval = C2.aval)
+
+-- 9. Muestra solo a los clientes que son aval de otro cliente
+SELECT C1.nombre
+FROM "Cliente" as C1 INNER JOIN "Cliente" as C2
+ON C1.aval = C2.aval
+ 

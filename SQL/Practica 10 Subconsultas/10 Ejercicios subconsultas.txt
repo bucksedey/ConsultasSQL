@@ -1,0 +1,121 @@
+Alumno: Flores Anzurez Marco Antonio
+Grupo: 3CV3
+Profesor: Edgar A. Catal�n Salgado
+
+EJERCICIOS SUBCONSULTAS
+
+
+--1. Muestra los productos que cuestan menos que una tele
+SELECT nombre
+	FROM "Producto"
+		 WHERE preciosugerido < (SELECT preciosugerido 
+								 	FROM "Producto"
+								WHERE idproducto = 1
+								)
+
+--2. �Que productos tienen el precio mas alto?
+SELECT nombre, preciosugerido 
+	FROM "Producto"
+		ORDER BY preciosugerido DESC
+
+--3. �Que clientes tienen un credito superior al promedio?
+SELECT nombre, credito
+	FROM "Cliente"
+		WHERE credito > (SELECT AVG(credito) FROM "Cliente") 
+
+--4. �Quienes deben mas que edgar?
+SELECT nombre, deuda
+	FROM "Cliente"
+		WHERE deuda > (SELECT deuda FROM "Cliente"
+					  	WHERE nombre LIKE 'Edgar'
+					  ) 
+
+--5. �Que clientes tienen el credito mas alto otorgado?
+SELECT nombre, credito
+	FROM "Cliente"
+		WHERE credito = (SELECT MAX(credito) FROM "Cliente")
+	
+--6 �Quienes no han comprado un dvd?
+	SELECT nombre
+	FROM "Cliente"
+		WHERE id NOT IN (SELECT DISTINCT idcliente FROM "Venta" 
+						WHERE 
+						idventa = (SELECT DISTINCT idventa FROM "ProductoVenta"
+									WHERE 
+									idproducto = (SELECT idproducto FROM "Producto" WHERE idproducto = 2)
+								  )				   
+				   )
+
+--7 �Que clientes no han comprado?
+SELECT id
+	FROM "Cliente"
+WHERE id NOT IN (SELECT idcliente FROM "Venta")
+
+--8 �De que delegacion no han comprado?
+SELECT DISTINCT delegacion
+	FROM "Cliente"
+WHERE id NOT IN (SELECT idcliente FROM "Venta")
+
+--9  �Que otros productos han comprado los que se han llevado un dvd?
+SELECT nombre
+	FROM "Producto"
+		WHERE idproducto IN (SELECT DISTINCT idproducto FROM "ProductoVenta"
+									WHERE 
+									idproducto IN (SELECT idproducto FROM "Producto" WHERE idproducto = 2)
+							)				  
+
+--10 �Que productos se han llevado en las ventas menores a 15000 (totalventa)?
+SELECT nombre
+	FROM "Producto"
+		WHERE idproducto IN (SELECT idproducto FROM "ProductoVenta"
+									WHERE 
+									idventa IN (SELECT idventa FROM "Venta" WHERE (preciounit*cantidad) < 15000 GROUP BY idventa)
+							)				   
+--11 �Que prductos se llevan las personas con un credito menor a 10000?
+SELECT nombre
+	FROM "Producto"
+		WHERE idproducto IN (SELECT idproducto FROM "ProductoVenta"
+									WHERE 
+									idventa IN (SELECT idventa FROM "Venta" 
+												WHERE 
+											   		idcliente IN (SELECT id FROM "Cliente" WHERE credito < 10000)
+												GROUP BY idventa
+											   )
+							)		
+
+--12  �Que otros productos se han llevado las personas que se llevaron un dvd y tienen un credito mayor al promedio
+SELECT nombre
+	FROM "Producto"
+		WHERE idproducto IN (SELECT DISTINCT idproducto FROM "ProductoVenta"
+							WHERE 
+							idproducto IN (SELECT idproducto FROM "Producto" WHERE idproducto = 2 AND (SELECT nombre FROM "Cliente" WHERE credito > AVG(credito)))
+							)			
+							
+--13  �Muestra a los clientes de la delegacion que tiene menos clientes?
+SELECT delegacion, COUNT(*) as num_clientes
+	FROM "Cliente"
+		GROUP BY delegacion
+		ORDER BY num_clientes ASC
+		LIMIT 1;
+
+--14 �En que delegacion compran mas (mayor cantidad de ventas)?
+SELECT delegacion, SUM(ven.idventa) as total_ventas
+	FROM "Cliente" cli
+		JOIN "Venta" ven ON cli.id = ven.idcliente
+			GROUP BY delegacion
+			ORDER BY total_ventas DESC
+			LIMIT 1;
+
+--15 �De que proveedor compran mas (mayor cantidad de productos vendidos)?
+SELECT s.nombre, SUM(pv.idproducto) as total_vendido
+	FROM "Proveedor" s
+		JOIN "Producto" p ON s.idproveedor = p.idproveedor
+		JOIN "ProductoVenta" pv ON p.idproducto = pv.idproducto
+		JOIN "Venta" v ON pv.idventa = v.idventa
+		JOIN "Cliente" c ON v.idcliente = c.id
+GROUP BY s.nombre
+ORDER BY total_vendido DESC
+LIMIT 1;
+
+
+

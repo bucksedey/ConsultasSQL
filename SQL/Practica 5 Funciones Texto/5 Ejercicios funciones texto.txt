@@ -1,0 +1,159 @@
+Flores Anzurez Marco Antonio 
+Grupo: 3CV3
+Profesor: Edgar A. Catalán Salgado
+	
+-- 1. Muestra los primeros tres caracteres del nombre
+    SELECT nombre,
+    	LEFT(nombre,3)
+    FROM "Cliente"
+
+-- 2. Muestra los últimos 3 caracteres del nombre
+    SELECT nombre,
+	    RIGHT(nombre,3)
+    FROM "Cliente"
+
+-- 3. Muestra del 2do al 5to caracter del nombre
+    SELECT nombre,
+	    SUBSTRING(nombre,2,5)
+    FROM "Cliente"
+
+-- 4. Reemplaza las d por s en nombre
+    SELECT nombre,
+	    REPLACE(nombre,'d','s')
+    FROM "Cliente"
+
+-- 5. Obtén la longitud del apellido paterno
+    SELECT appaterno,
+    	CHAR_LENGTH(appaterno)
+    FROM "Cliente"
+
+-- 6. Muestra los nombres sin los espacios en blanco al inicio del nombre
+    SELECT nombre,
+		LTRIM(nombre)
+	FROM "Cliente"
+		
+-- 7. Muestra a los nombres que tienen espacios al final
+    SELECT nombre,
+        RTRIM(nombre)
+    FROM "Cliente"
+
+-- 8. Muestra en mayusculas el nombre
+    SELECT nombre,
+        UPPER(nombre)
+    FROM "Cliente"
+    
+-- 9. Muestra en minusculas el apellido paterno
+    SELECT nombre,
+        LOWER(nombre)
+    FROM "Cliente"
+
+-- 10. Muestra la cantidad de caracteres del nombre
+    SELECT nombre,
+        CHAR_LENGTH(nombre)
+    FROM "Cliente"
+
+-- 11. Muestra a los clientes con su delegación, reemplazando Benito Juarez por B. Juarez 
+    SELECT nombre, 
+	    REPLACE(delegacion,'Benito Juarez','B. Juarez') AS delegacion
+    FROM "Cliente"
+
+-- 12. Muestra el nombre completo empezando por el apellido paterno con mayusculas
+    SELECT 
+    	REPLACE(nombre, nombre , UPPER(appaterno) || ' ' || apmaterno || ' ' || nombre) AS "Nombre Completo"
+    FROM "Cliente"
+
+-- 13. Muestra el nombre completo en mayusculas empezando por el apellido paterno 
+    SELECT 
+	    REPLACE(nombre, nombre , UPPER(appaterno || ' ' || apmaterno || ' ' || nombre)) AS "Nombre Completo"
+    FROM "Cliente"
+
+-- 14. Muestra el nombre de los clientes con las E reemplazadas con el numero 3
+    SELECT 
+	    REPLACE(nombre, 'e', '3')
+    FROM "Cliente"
+
+-- 15. Muestra el nombre de los clientes con las o reemplazados con con el numero 0
+    SELECT 
+	    REPLACE(nombre, 'o', '0')
+    FROM "Cliente"
+
+Uso de funciones para condicionar registros
+-- 1. Muestra solo a los clientes que su nombre tiene mas de 5 letras
+    SELECT nombre
+        FROM "Cliente"
+	WHERE CHAR_LENGTH(nombre) > 5
+
+-- 2. Muestra a los clientes que su nombre tiene entre 5 y 7 caracteres
+    SELECT nombre
+        FROM "Cliente"
+	WHERE CHAR_LENGTH(nombre) BETWEEN 5 AND 7
+
+-- 3. Muestra a los que clientes que tienen espacios en blanco al inicio del nombre
+    SELECT nombre
+	    FROM "Cliente"
+    WHERE LTRIM(nombre) != nombre
+
+-- 4. Muestra solo a los clientes que tienen espacios al final del nombre
+    SELECT nombre
+	    FROM "Cliente"
+    WHERE RTRIM(nombre) != nombre
+
+-- 5. Muestra solo a los clientes que tienen espacios en blanco al inicio o al final del nombre
+    SELECT nombre
+	    FROM "Cliente"
+    WHERE RTRIM(nombre) != nombre OR LTRIM(nombre) != nombre
+
+Anidamiento de funciones y concatenaciones
+
+-- 1. Muestra el nombre de los clientes reemplazando lo siguientes caracteres: E-->3, O-->0 (Desmond--> D3sm0nd)
+    SELECT nombre,
+	    REPLACE(REPLACE(nombre, 'e', '3'),'o', '0')
+    FROM "Cliente"
+
+-- 2. Muestra el nombre de los clientes reemplazando los siguientes caracteres A-->@,E-->3,I-->!, O-->0 ( Murcielago--> Murc!3l@g0)
+    SELECT nombre,
+	    REPLACE(REPLACE(REPLACE(REPLACE(nombre, 'a', '@'),'e', '3'),'i','!'),'o','0')
+    FROM "Cliente"
+
+-- 3. Convierte los primeros dos caracteres del nombre en mayúscula (Edgar-->EDgar)
+    SELECT nombre,
+	    UPPER(SUBSTRING(nombre,1,2)) || SUBSTRING(nombre,3,CHAR_LENGTH(nombre))
+    FROM "Cliente"
+
+-- 4. Convierte el ultimo caracter del nombre en mayusculas (Edgar-->EdgaR)
+    SELECT nombre,
+	    SUBSTRING(nombre,1,CHAR_LENGTH(nombre)-1) || UPPER(SUBSTRING(nombre,CHAR_LENGTH(nombre),CHAR_LENGTH(nombre)))
+    FROM "Cliente"
+
+-- 5. Convierte el 3er caracter del nombre en Mayuscula (Edgar--> EdGar)
+    SELECT nombre,
+	    REPLACE(nombre,SUBSTRING(nombre,3,1),UPPER(SUBSTRING(nombre,3,1)))
+    FROM "Cliente"
+			
+-- 6. Convierte el 2do y 4to caracter del nombre a Mayuscula(Edgar-->EDgAr)
+    SELECT nombre,
+	    SUBSTRING(nombre,1,1) || UPPER(SUBSTRING(nombre,2,1)) || SUBSTRING(nombre,3,1) || UPPER(SUBSTRING(nombre,4,1)) || SUBSTRING(nombre,5,CHAR_LENGTH(nombre))
+    FROM "Cliente"
+
+-- 7. Convierte a mayusculas el  penúltimo caracter del nombre (Edgar-->EdgAr)
+    SELECT nombre,
+	    SUBSTRING(nombre,1,CHAR_LENGTH(nombre)-2) || UPPER(SUBSTRING(nombre,CHAR_LENGTH(nombre)-1,1)) || SUBSTRING(nombre,CHAR_LENGTH(nombre),1)
+    FROM "Cliente"
+
+-- 8. Convierte a mayusculas el segundo y ultimo caracter (Armando-->ARmandO)
+    SELECT nombre,
+	    SUBSTRING(nombre,1,1) || UPPER(SUBSTRING(nombre,2,1)) || SUBSTRING(nombre,3,CHAR_LENGTH(nombre)-3) || UPPER(SUBSTRING(nombre,CHAR_LENGTH(nombre),1))  
+    FROM "Cliente"
+
+-- 9. Convierte a mayuscula el segundo y penúltimo caracter (Armando--> ArmanDo) 
+    SELECT nombre,
+	    SUBSTRING(nombre,1,1) || UPPER(SUBSTRING(nombre,2,1)) || SUBSTRING(nombre,3,CHAR_LENGTH(nombre)-4) || UPPER(SUBSTRING(nombre,CHAR_LENGTH(nombre)-1,1)) || SUBSTRING(nombre,CHAR_LENGTH(nombre),1)  
+    FROM "Cliente"
+
+-- 10. Convierte a mayuscula el segundo, cuarto y penúltimo caracter del nombre(Armando--> ARmAnDo)
+    SELECT nombre,
+    	SUBSTRING(nombre,1,1) || UPPER(SUBSTRING(nombre,2,1)) || SUBSTRING(nombre,3,1) || UPPER(SUBSTRING(nombre,4,1)) || SUBSTRING(nombre,5,CHAR_LENGTH(nombre)-2) || UPPER(SUBSTRING(nombre,CHAR_LENGTH(nombre)-1,1)) || SUBSTRING(nombre,CHAR_LENGTH(nombre),1)  
+    FROM "Cliente"
+
+
+

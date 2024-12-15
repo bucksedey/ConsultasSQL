@@ -1,0 +1,194 @@
+
+Alumno: Flores Anzurez Marco Antonio
+Grupo: 3CV3
+Profesor: Edgar A. Catalan Salgado
+
+
+               
+-- 1. Muestra el texto fijo Hola humano y el numero 5000
+	SELECT 'Hola ' || 'Humano ' || '5000'
+    FROM "Cliente" ;
+
+-- 2. Muestra el nombre de los clientes
+    SELECT Nombre
+    FROM "Cliente" ;
+
+-- 3. Muestra el texto fijo Hola y el nombre de los clientes
+    SELECT 'Hola' || Nombre
+    FROM "Cliente";
+
+-- 4. Muestra el nombre de los clientes y el numero 300 
+    SELECT Nombre, 300
+    FROM "Cliente";
+
+-- 5. Muestra el texto hola, el nombre del cliente y el numero 0
+    SELECT 'hola ' || Nombre || ' 0'
+    FROM "Cliente";
+
+-- 6. Muestra apellido paterno, materno y nombre de los clientes
+    SELECT ApPaterno, ApMaterno, Nombre
+    FROM "Cliente";
+
+-- 7. Muestra nombre, apellido paterno y materno de los clientes
+    SELECT Nombre, ApPaterno, ApMaterno
+    FROM "Cliente";
+
+-- 8. Muestra Id, nombre, apellido paterno y rfc de los clientes
+    SELECT Id, Nombre, ApPaterno, RFC
+    FROM "Cliente";
+
+-- 9. Muestra apellido paterno y los datos de direccion de los clientes
+    SELECT ApPaterno, Pais, Estado, Delegacion, Calle, NumExt, NumInt, Ip
+    FROM "Cliente";
+    
+-- 10. Muestra apellido paterno, materno, nombre, su credito y deuda de los clientes
+    SELECT ApPaterno, ApMaterno, Nombre, Credito, Deuda
+    FROM "Cliente";
+
+-- 11. Muestra el nombre de los proveedores
+    SELECT Nombre 
+    FROM "Proveedor";
+
+-- 12. Muestra todos los datos de los clientes
+    SELECT * FROM "Cliente";
+
+-- 13. Muestra el nombre los productos
+    SELECT Nombre
+    FROM "Producto";
+
+-- 14. Muestra el nombre y precio sugerido de venta de los productos
+    SELECT Nombre, PrecioSugerido
+    FROM "Producto";
+
+-- 15. Muestra el nombre, precio de compra y precio sugerido de venta de los productos
+    SELECT Nombre, PrecioCompra, PrecioSugerido
+    FROM "Producto";
+
+
+
+USO DE ALIAS PARA PONER TITULOS EN LAS COLUMNAS
+
+
+-- 1. Cambia el titulo de la columna codpost a CODIGO POSTAL de los clientes
+    SELECT CP AS "CODIGO POSTAL"
+	FROM "Cliente";
+
+-- 2. Muestra el RFC como REGISTRO FEDERAL DE CONTRIBUYENTES en la tabla de clientes
+    SELECT RFC AS "REGISTRO FEDERAL DE CONTRIBUYENTES"
+	FROM "Cliente";
+
+-- 3. Muestra  apellido paterno como A.paterno, el apellido materno como A. Materno y el nombre de los clientes
+    SELECT ApPaterno AS "A.Paterno", ApMaterno AS "A.Materno", Nombre
+	FROM "Cliente";
+
+-- 4. muestra pais como pais de origen, nombre y el rfc como registro de contribuyentes de los clientes
+    SELECT Pais AS "Pais de origen", Nombre, RFC AS "Registro de contribuyentes"
+	FROM "Cliente";
+
+-- 5. Muestra el nombre, la deuda y el numero 1000 con el titulo pago a deuda
+    SELECT Nombre, Deuda, 1000 AS "Pago a deuda"
+	FROM "Cliente";
+
+-- 6. Muestra el nombre, el precio sugerido de venta como P. VENTA y la existencia de los productos
+    SELECT Nombre, PrecioSugerido AS "P.Venta", existencia
+	FROM "Producto";
+
+-- 7. Muestra el nombre, el precio sugerido de venta con el titulo P. Venta y el numero 30 con el titulo DESCUENTO
+    SELECT Nombre, PrecioSugerido AS "P.Venta", 30 AS DESCUENTO
+	FROM "Producto";
+
+-- 8. Muestra el nombre del producto 
+    SELECT Nombre FROM "Producto";
+
+-- 9. Muestra el Nombre con el titulo producto, la existencia, el numero 10 con el titulo cantidad solicitada y el precio sugerido de venta con el titulo P.Sugerido de los productos.
+    SELECT Nombre AS Producto, Existencia, 10 AS "Cantidad Solicitada", PrecioSugerido AS "P.Sugerido"
+	FROM "Producto";
+
+-- 10. Muestra el nombre con el titulo PROVEEDOR de los proveedores
+    SELECT Nombre AS PROVEEDOR
+	FROM "Proveedor";
+
+--COLUMNAS GENERADAS
+
+Nota. Lo que esta entre corchetes son datos obtenidos de la BD u operaciones con estos y debe generarse la frase en cuestion para todos los registros de la tabla correspondiente
+
+
+-- 1. Muestra el nombre completo de los clientes
+    SELECT Nombre || ' ' || ApPaterno || ' ' || ApMaterno 
+	FROM "Cliente";
+
+-- 2. Muestra el nombre con el apellido paterno
+    SELECT Nombre || ' ' || ApPaterno 
+	FROM "Cliente";
+
+-- 3. Muestra el nombre completo empezando por el apellido paterno
+    SELECT ApPaterno  || ' ' || ApMaterno || ' ' || Nombre
+	FROM "Cliente";
+
+-- 4. Muestra "El cliente [Edgar] se apellida [Catalan].
+    SELECT 'El cliente ' || Nombre  || 'se apellida ' || ApPaterno
+	FROM "Cliente";
+
+-- 5. Muestra "[Edgar] vive en [Iztacalco]".
+    SELECT Nombre  || 'vive en ' || Delegacion
+	FROM "Cliente";
+
+-- 6. Muestra el resultado de credito-deuda como "Credito disponible".
+    SELECT Credito-Deuda AS "Credito disponible"
+	FROM "Cliente";
+
+-- 7. Cuanto seria el 15% de la deuda de cada cliente.
+    SELECT Deuda*.15 
+	FROM "Cliente";
+
+-- 8. Muestra al cliente, su deuda, el 10% de su deuda y su deuda con ese incremento.
+    SELECT nombre, deuda, deuda*.10, deuda+(deuda*.10)
+	FROM "Cliente";
+
+-- 9. ¿Cuanto tendria que el cliente mensualmente si se le ofrece pagar su deuda a 6 meses?
+    SELECT Deuda/6
+	FROM "Cliente";
+
+-- 10. Cuanto tendria que pagar el cliente por mes a 6,12 y 24 meses para cubrir su deuda.
+    SELECT Deuda/6, Deuda/12, Deuda/24
+	FROM "Cliente";
+
+-- 11.Muestra el nombre completo del cliente, su deuda y las mensualidades a 6 meses con un cargo del 10%
+    SELECT Nombre || ' ' || ApPaterno || ' ' || ApMaterno, Deuda, (Deuda/6)+((Deuda/6)*.10)
+	FROM "Cliente";
+
+-- 12. Si se le aplica un descuento del 30% ¿Cuanto tendria que pagar el cliente?
+    SELECT Deuda - Deuda*.30
+	FROM "Cliente";
+
+-- 13. De cuanto serian las mensualidades de la deuda restante a 6,12 y 24 meses, si primero se da un anticipo del 30%
+    SELECT (Deuda-Deuda*.30)/6, (Deuda-Deuda*.30)/12, (Deuda-Deuda*.30)/24
+	FROM "Cliente";
+
+-- 14. Muestra "El credito de [Edgar] es [5000]"
+    SELECT 'El credito de ' || Nombre || ' es ' || Credito
+	FROM "Cliente";
+
+-- 15. Muestra "[Edgar] tiene un credito de[5000] y debe[3000], por tanto puede pedir otro credito de hasta[credito-deuda]
+    SELECT Nombre || ' tiene un credito de ' || Credito || ' y debe ' || Deuda || ', por tanto puede pedir otro credito de hasta ' || Credito-Deuda
+	FROM "Cliente";
+
+-- 16. Muestra "[Edgar] en un credito a 6 meses tiene que pagar un total de [12000]por tanto pagara mensulamente[2000]"
+    SELECT Nombre || ' en un credito a 6 meses tiene que pagar un total de ' || Deuda || ' por tanto pagara mensualmente ' || Deuda/6 
+	FROM "Cliente";
+
+-- 17. Muestra "Estimado cliente [Edgar Catalan], le recordamos que tiene una deuda de [10000] pesos, le ofrecemos la posibilidad de pagar el 40% ([4000] pesos) y el resto a 6 meses con el 10% de interes, quedando en [1100] pesos mensuales  "
+    SELECT 'Estimado cliente ' || Nombre || ' ' || ApPaterno || ', le recordamos que tiene una deuda de ' || Deuda || ' pesos, le ofrecemos la posibilidad de pagar el 40% (' || Deuda*.40 || ') pesos y el resto a 6 meses con el 10% de interes, quedando en ' || (Deuda*.60+((Deuda*.60)/10))/6 || ' pesos mensuales'
+	FROM "Cliente";
+
+-- 18. Muestra: "El producto [Tele] se vende en [15000]" 
+    SELECT 'El producto ' || Nombre || ' se vende en ' || PrecioVenta
+	FROM "Producto";
+
+-- 19. Muestra: "El producto [Tele] nos cuesta [5000] y se vende en [15000], por lo que su ganancia es de [PrecioVenta-PrecioCompra] "
+    SELECT 'El producto ' || Nombre || ' nos cuesta ' || PrecioCompra || ' y se vende en ' || PrecioSugerido || ', por lo que su ganancia es de ' || PrecioSugerido-PrecioCompra
+	FROM "Producto";
+
+-- 20. Si resurtimos 10 [Televisiones] con el ultimo precio de compra: [5000] nos costara  :[50000]
+    SELECT 'Si resurtimos 10 ' || Nombre || ' con el ultimo precio de compra: ' || PrecioCompra || ' nos costara: ' || PrecioCompra*10 
+	FROM "Producto";

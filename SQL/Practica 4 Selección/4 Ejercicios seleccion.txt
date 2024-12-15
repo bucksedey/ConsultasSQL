@@ -1,0 +1,422 @@
+Nombre: Flores Anzurez Marco Antonio
+Grupo: 3CV3
+Profesor: Edgar A. Catalán Salgado
+
+
+
+SELECCION DE REGISTROS
+
+
+--1.- Los clientes con el nombre de Edgar
+     SELECT nombre 
+	FROM "Cliente"
+	     WHERE nombre = 'Edgar'
+
+--2. Los clientes que no se llamen Edgar
+     SELECT nombre 
+	FROM "Cliente"
+	     WHERE NOT nombre = 'Edgar'
+
+--3. Los clientes con un credito mayor a 5000
+     SELECT nombre, credito
+	FROM "Cliente"
+		WHERE credito > 5000
+
+--4. Los clientes con un credito menor a 5000
+     SELECT nombre, credito 
+	FROM "Cliente"
+		WHERE credito < 5000
+
+--5. Los clientes de la Delegacion Iztacalco
+     SELECT nombre, delegacion
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco'
+
+--6. Los productos con un precio sugerido de mas de 5000
+     SELECT nombre, PrecioSugerido
+	FROM "Producto"
+		WHERE PrecioSugerido > 5000
+
+--7. Los productos de los que nos queden menos de 5
+     SELECT nombre, existencia
+	FROM "Producto"
+		WHERE existencia < 5
+
+--8. Los clientes cuyo pago mensual a 6 meses sea mayor a 1000
+     SELECT nombre, deuda/6 AS "Pago Mensual"
+	FROM "Cliente"
+		WHERE deuda/6 > 1000
+
+--9. Los clientes cuyo crédito disponible (Crédito- Deuda), sea menor o igual a 3000
+     SELECT nombre, credito-deuda AS "Credito Disponible"
+	FROM "Cliente"
+		WHERE credito-deuda <= 3000
+
+--10. Los clientes a los que su deuda incrementada en 20% sea mayor a 20000
+     SELECT nombre, deuda+deuda*.20 AS "Deuda + 20%"
+	FROM "Cliente"
+		WHERE deuda+deuda*.20 > 20000
+
+--11. Los clientes que si dan un anticipo del 20%, su deuda es menor de 10000
+     SELECT nombre, deuda-deuda*.20 AS "Deuda - 20%"
+	FROM "Cliente"
+		WHERE deuda-deuda*.20 < 10000
+
+
+
+
+SELECCION DE NULOS
+
+
+
+EJERCICIOS 
+
+--1. Muestra a los clientes que todavia no tienen asignado credito
+     SELECT nombre, credito
+	FROM "Cliente"
+		WHERE credito IS NULL
+
+--2. Muestra a los clientes que nos falta su RFC
+     SELECT nombre, rfc
+	FROM "Cliente"
+		WHERE rfc IS NULL
+
+--3. Muestra a los clientes que no tienen apellido materno
+     SELECT nombre, apmaterno
+	FROM "Cliente"
+		WHERE apmaterno IS NULL
+
+--4. Muestra solo a los clientes que si tienen asignado un RFC
+     SELECT nombre, rfc
+	FROM "Cliente"
+		WHERE NOT rfc IS NULL
+
+--5. Muestra solo a los clientes que si tienen correo electrónico registrado
+     SELECT nombre, email
+	FROM "Cliente"
+		WHERE NOT email IS NULL
+
+--6. Muestra solo a los productos que si tienen precio sugerido de venta
+     SELECT nombre, preciosugerido
+	FROM "Producto"
+		WHERE NOT preciosugerido IS NULL
+
+--7. Muestra a los clientes que no tienen delegación especificada  
+     SELECT nombre, delegacion
+	FROM "Cliente"
+		WHERE delegacion IS NULL
+
+
+SELECCION CON OPERADORES LOGICOS 
+
+
+--1. Los clientes que no viven en Iztacalco
+	SELECT nombre, delegacion
+	FROM "Cliente"
+		WHERE NOT delegacion = 'Iztacalco'
+
+--2. Los clientes que no se llaman Edgar
+	SELECT nombre
+	FROM "Cliente"
+		WHERE NOT nombre = 'Edgar'
+
+--3. Los que se llaman Edgar o Juan
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' OR nombre = 'Juan'
+
+--4. Los que NO se llaman Edgar o Juan
+	SELECT nombre
+	FROM "Cliente"
+		WHERE NOT (nombre = 'Edgar' OR nombre = 'Juan')
+
+--5. Los que tienen un credito entre 5000 y 10000
+	SELECT nombre, credito
+	FROM "Cliente"
+		WHERE credito >= 5000 AND credito <= 10000
+
+--6. Los que NO tienen un credito entre 5000 y 10000
+	SELECT nombre, credito
+	FROM "Cliente"
+		WHERE NOT credito >= 5000 AND credito <= 10000
+
+--7 Los que se llamen Edgar y su apellido paterno es  Catalan
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' AND appaterno = 'Catalan'
+
+--8. Los que su apellido paterno es Catalan y NO se llaman Edgar
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE nombre != 'Edgar' AND appaterno = 'Catalan'
+
+--9. Los que se llaman Blanca o su apellido paterno es Catalan
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE nombre = 'Blanca' OR appaterno = 'Catalan'
+
+--10. Los que cualquiera de sus apellidos es Catalan
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE apmaterno = 'Catalan' OR appaterno = 'Catalan'
+
+--11. Los que ninguno de sus apellidos es Catalan
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE NOT (apmaterno = 'Catalan' OR appaterno = 'Catalan')
+
+--12. Los que su apellido paterno es Catalan o Perez
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE appaterno = 'Catalan' OR appaterno = 'Perez'
+
+--13. Los que su apellido paterno es Catalan, Perez o Garcia
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE appaterno = 'Catalan' OR appaterno = 'Perez' OR appaterno = 'Garcia'
+
+--14. Los que cualquiera de sus apellidos es Catalan o Perez
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE (appaterno = 'Catalan' OR appaterno = 'Perez') OR (apmaterno = 'Catalan' OR apmaterno = 'Perez')
+
+--15. Los que se llaman Edgar y su apellido paterno es Catalan o Perez
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' AND (appaterno = 'Catalan' OR appaterno = 'Perez')
+
+--16. Los que se llaman Edgar y su apellido paterno NO sea Catalan o Perez
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' AND NOT (appaterno = 'Catalan' OR appaterno = 'Perez')
+
+--17. Los de la delegacion Iztacalco, GAM y bendito Juarez
+	SELECT nombre, delegacion
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco' OR delegacion = 'GAM' OR delegacion = 'bendito Juarez'
+
+--18. Los de Iztacalco y GAM que su apellido paterno sea Catalan
+	SELECT nombre, appaterno, delegacion
+	FROM "Cliente"
+		WHERE (delegacion = 'Iztacalco' OR delegacion = 'GAM') AND appaterno = 'Catalan'
+
+--19. Los que viven en Iztacalco y su credito esta en 5000 y 10000
+	SELECT nombre, delegacion, credito
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco' AND credito BETWEEN 5000 AND 10000
+
+--20. Los que viven en Iztacalco o Coyoacan y su deuda esta en 10000 y 20000
+	SELECT nombre, delegacion, credito
+	FROM "Cliente"
+		WHERE (delegacion = 'Iztacalco' OR delegacion = 'Coyoacan') AND credito BETWEEN 10000 AND 20000
+
+--21. Los de Iztacalco y GAM que cualquiera de sus apellidos sea Catalan 
+	SELECT nombre, delegacion, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE (delegacion = 'Iztacalco' OR delegacion = 'GAM') AND (appaterno = 'Catalan' OR apmaterno = 'Catalan')
+
+--22. Los que se llaman Edgar y cualquiera de sus apellidos sea Catalan o Perez
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' AND (appaterno = 'Perez' OR appaterno = 'Catalan' OR apmaterno = 'Perez' OR apmaterno = 'Catalan')
+
+--23. Los que se llaman Edgar y ninguno de sus apellidos sea Catalan o Perez
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' AND NOT(appaterno = 'Perez' OR appaterno = 'Catalan' OR apmaterno = 'Perez' OR apmaterno = 'Catalan')
+
+--24. Los de la delegacion Iztacalco que su pago mensual a 6 meses sea mayor o igual a 1000
+	SELECT nombre, delegacion, deuda/6 AS "Pago a 6 meses"
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco' AND deuda/6 >= 1000
+
+--25. Los de la delegacion Iztacalco que no tengan credito asignado
+	SELECT nombre, delegacion, credito
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco' AND credito IS NULL
+
+--26. Los de la delegacion Iztacalco con un credito disponible( Credito-Deuda) mayor a 10000
+	SELECT nombre, delegacion, credito-deuda AS "Credito Disponible"
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco' AND credito-deuda > 10000
+
+--27. Los de la delegacion Iztacalco que no tengan apellido materno o credito asignado
+	SELECT nombre, delegacion, apmaterno, credito
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco' AND apmaterno IS NULL OR credito IS NULL
+
+--28. Los de la delegaciones GAM e Iztacalco que no tengan apellido materno o credito asignado
+	SELECT nombre, delegacion, apmaterno, credito
+	FROM "Cliente"
+		WHERE delegacion = 'Iztacalco' OR delegacion = 'GAM' AND apmaterno IS NULL OR credito IS NULL
+
+
+
+OPERADORES ESPECIALES
+
+
+--1. Credito entre 5000 y 10000 con between
+	SELECT nombre, credito
+	FROM "Cliente"
+		WHERE credito BETWEEN 5000 AND 10000
+
+--2. Los de la delegacion Iztacalco, Coyoacan o Benito Juarez
+	SELECT nombre, delegacion
+	FROM "Cliente"
+		WHERE delegacion IN ('Iztacalco','Coyoacan','Benito Juarez')
+
+--3. Los que su deuda este entre 10000 y 15000 y su pago mensual a 12 meses este entre 500 y 1000
+	SELECT nombre, deuda, deuda/12 AS "Pago mensual a 12 meses"
+	FROM "Cliente"
+		WHERE (deuda BETWEEN 10000 AND 15000) AND (deuda/12 BETWEEN 500 AND 1000)
+
+--4. Los de la delegacion Iztacalco, Coyoacan o Benito Juarez y que su deuda este entre 10000 y 15000
+	SELECT nombre, delegacion, deuda
+	FROM "Cliente"
+		WHERE delegacion IN ('Iztacalco','Coyoacan','Benito Juarez') AND deuda BETWEEN 10000 AND 15000
+
+--5. Los de la delegacion Iztacalco, Coyoacan o Benito Juarez y su apellido paterno sea Catalan
+	SELECT nombre, delegacion, appaterno
+	FROM "Cliente"
+		WHERE delegacion IN ('Iztacalco','Coyoacan','Benito Juarez') AND appaterno = 'Catalan'
+
+--6. Los de la delegacion Iztacalco, Coyoacan o Benito Juarez y cualquiera de sus apellidos sea Catalan
+	SELECT nombre, delegacion, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE delegacion IN ('Iztacalco','Coyoacan','Benito Juarez') AND appaterno = 'Catalan' OR apmaterno = 'Catalan'
+
+--7. Los de la delegacion Iztacalco, Coyoacan o Benito Juarez y cualquiera de sus apellidos sea Catalan, Perez o Garcia
+	SELECT nombre, delegacion, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE delegacion IN ('Iztacalco','Coyoacan','Benito Juarez') AND appaterno IN ('Catalan','Perez','Garcia') OR apmaterno IN ('Catalan','Perez','Garcia')
+
+
+EJERCICIOS BUSQUEDA DE PATRONES
+
+
+Ejercicios	
+
+--1. Los clientes que se llamen Edgar sin importar que tengan 2 nombres
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE '%Edgar%'
+
+--2. los clientes que su segundo caracter sea una "d"
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE '_d%'
+
+--3. Los que empiecen con una vocal
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE 'A%' 
+			OR nombre LIKE 'E%' 
+			OR nombre LIKE 'I%' 
+			OR nombre LIKE 'O%' 
+			OR nombre LIKE 'U%'
+
+--4. Los que no empiecen con  vocal
+	SELECT nombre
+	FROM "Cliente"
+		WHERE NOT (nombre LIKE 'A%' 
+			OR nombre LIKE 'E%' 
+			OR nombre LIKE 'I%' 
+			OR nombre LIKE 'O%' 
+			OR nombre LIKE 'U%')
+
+--5.Los que su nombre termine con 'r' 
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE '%r'
+
+--6.los que empiecen con una vocal y terminen con h
+	SELECT nombre
+	FROM "Cliente"
+		WHERE (nombre LIKE 'A%' 
+			OR nombre LIKE 'E%' 
+			OR nombre LIKE 'I%' 
+			OR nombre LIKE 'O%' 
+			OR nombre LIKE 'U%')
+			AND nombre LIKE '%h'
+
+--7. Los que su tercer caracter sea una G
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE '__g%'
+
+--8. los que su primer caracter sea 'E' y el 4 sea 'a'
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE 'E___a%'
+
+--9. Los que tengan por lo menos una 'E' en su nombre
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE '%E%' OR nombre LIKE '%e%'
+
+--10. Los que tengan dos 'E'
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE '%e%e%'
+
+--11. Los que tengan por lo menos 2 vocales
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre SIMILAR TO '%[AEIOUaeiou]%[AEIOUaeiou]%'
+
+--12.Los que tengan menos de 2 vocales
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre NOT SIMILAR TO '%[AEIOUaeiou]%[AEIOUaeiou]%'
+
+--13.Los que se llamen edgar y su apellido paterno empiece con 'C'
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' AND appaterno LIKE 'C%'
+
+--14.los que se llamane Edgar y Cualquiera de sus apellidos empiece con'C'
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE nombre = 'Edgar' AND (appaterno LIKE 'C%' OR apmaterno LIKE 'C%')
+
+--15.Los clientes que su apellido empiece con la primera mitad del alfabeto [a-m]
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE appaterno SIMILAR TO '[A-M]%' OR apmaterno SIMILAR TO '[A-M]%'
+
+--16.Los clientes que su apellido paterno empiece con la segunda mitad del alfabeto [n-z]
+	SELECT nombre, appaterno
+	FROM "Cliente"
+		WHERE appaterno SIMILAR TO '[N-Z]%'
+
+--17.Los clientes que su apellido empiece con la primera mitad del alfabeto [a-m]
+     pero que no empiecen ni con A ni con E
+	SELECT nombre, appaterno, apmaterno
+	FROM "Cliente"
+		WHERE appaterno SIMILAR TO '[A-M]%' AND appaterno NOT SIMILAR TO '[AE]%'
+			OR apmaterno SIMILAR TO '[A-M]%' AND apmaterno NOT SIMILAR TO '[AE]%'
+
+--18.Los clientes que su apellido paterno empiece con la segunda mitad del alfabeto [n-z] con un credito mayor a 10000
+	SELECT nombre, appaterno, credito
+	FROM "Cliente"
+		WHERE appaterno SIMILAR TO '[N-Z]%' AND credito > 10000
+
+--19.Los clientes que su apellido paterno empiece con la segunda mitad del alfabeto [n-z] que tengan un credito mayor a 10000 y que la mensualidad a pagar a 6 meses sea mayor a 1000
+	SELECT nombre, appaterno, credito, deuda/6 AS "Mensualidades"
+	FROM "Cliente"
+		WHERE appaterno SIMILAR TO '[N-Z]%' AND credito > 10000 AND deuda/6 > 1000
+
+--20.Los clientes que su nombre empiece con E y su penultimo caracter sea A (Edgar)
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE 'E%a_' 
+
+--21.Los clientes que su nombre empiece con E, su cuarto caracter sea Z y el antepenultimo sea una vocal (Elizabeth )
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre SIMILAR TO 'E__z%[aeiou]__' 
+
+--22.Los que tengan 2 o mas nombres
+	SELECT nombre
+	FROM "Cliente"
+		WHERE nombre LIKE '% %'
